@@ -1,0 +1,13 @@
+# IntelliJ
+.idea/
+*.xml
+
+# Build output
+target/
+
+# TestNG
+*.testng
+
+# Allure
+allure-results/
+allure-report/
