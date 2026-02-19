@@ -7,7 +7,7 @@ public class Booking {
     private final String email;
     private final String phone;
 
-    public Booking(String firstName, String lastName, String email, String phone) {
+    private Booking(String firstName, String lastName, String email, String phone) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

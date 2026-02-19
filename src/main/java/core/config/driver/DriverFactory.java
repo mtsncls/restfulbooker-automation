@@ -1,7 +1,6 @@
 package core.config.driver;
 
 import core.config.ConfigManager;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -11,6 +10,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 public class DriverFactory {
@@ -29,39 +30,45 @@ public class DriverFactory {
     }
 
     private static WebDriver createLocalDriver(String browser) {
-        switch (browser) {
-            case "chrome" -> {
-                WebDriverManager.chromedriver().setup();
-                return new ChromeDriver(new ChromeOptions());
-            }
-            case "firefox" -> {
-                WebDriverManager.firefoxdriver().setup();
-                return new FirefoxDriver(new FirefoxOptions());
-            }
-            case "edge" -> {
-                WebDriverManager.edgedriver().setup();
-                return new EdgeDriver(new EdgeOptions());
-            }
-            default -> throw new IllegalArgumentException("Unsupported browser: " + browser);
-        }
+        return switch (browser.toLowerCase()) {
+            case "chrome" -> new ChromeDriver(chromeOptions());
+            case "firefox" -> new FirefoxDriver(firefoxOptions());
+            case "edge" -> new EdgeDriver(edgeOptions());
+            default -> throw new IllegalArgumentException("Unsupported local browser: " + browser);
+        };
     }
 
-    private static WebDriver createRemoteDriver(String browser) throws RuntimeException {
+    private static WebDriver createRemoteDriver(String browser) {
+        URL gridUrl = validateGridUrl(ConfigManager.getGridUrl());
+
+        return switch (browser.toLowerCase()) {
+            case "chrome" -> new RemoteWebDriver(gridUrl, chromeOptions());
+            case "firefox" -> new RemoteWebDriver(gridUrl, firefoxOptions());
+            case "edge" -> new RemoteWebDriver(gridUrl, edgeOptions());
+            default -> throw new IllegalArgumentException("Unsupported remote browser: " + browser);
+        };
+    }
+
+    private static URL validateGridUrl(String rawUrl) {
         try {
-             URL gridUrl = new URL(ConfigManager.getGridUrl());
-
-             switch (browser) {
-                 case "chrome" -> {return new RemoteWebDriver(gridUrl, new ChromeOptions());}
-
-                 case "firefox" -> {return new RemoteWebDriver(gridUrl, new FirefoxOptions());}
-
-                 case "edge" -> {return new RemoteWebDriver(gridUrl, new EdgeOptions());}
-
-                 default -> throw new IllegalArgumentException("Unsupported browser for grid: " + browser);
-             }
-
-        } catch (MalformedURLException e){
-                throw new IllegalArgumentException("Invalid grid URL: " + ConfigManager.getGridUrl(), e);
+            return new URI(rawUrl).toURL();
+        } catch (URISyntaxException | MalformedURLException e) {
+            throw new IllegalStateException("Invalid Selenium Grid URL: " + rawUrl, e);
         }
     }
+
+    private static ChromeOptions chromeOptions() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--disable-gpu", "--no-sandbox");
+        return options;
+    }
+
+    private static FirefoxOptions firefoxOptions() {
+        return new FirefoxOptions();
+    }
+
+    private static EdgeOptions edgeOptions() {
+        return new EdgeOptions();
+    }
+
 }
