@@ -1,7 +1,6 @@
 package api.client;
 
 import api.models.BookingPayload;
-import api.models.BookingResponse;
 import io.restassured.response.Response;
 
 public class BookingClient extends BaseApiClient {
@@ -9,45 +8,27 @@ public class BookingClient extends BaseApiClient {
     private static final String BOOKING = "/booking/";
     private static final String TOKEN = "token";
 
-    public BookingResponse createBooking(BookingPayload payload) {
+    public Response createBooking(BookingPayload payload) {
         return request()
                 .body(payload)
-                .post(BOOKING)
-                .then()
-                .statusCode(200)
-                .extract()
-                .as(BookingResponse.class);
+                .post(BOOKING);
     }
 
-    public BookingPayload getBooking(int id) {
+    public Response getBooking(int id) {
         return request()
-                .get(BOOKING + id)
-                .then()
-                .statusCode(200)
-                .extract()
-                .as(BookingPayload.class);
+                .get(BOOKING + id);
     }
 
-    public BookingPayload updateBooking(int id, BookingPayload payload, String token) {
+    public Response updateBooking(int id, BookingPayload payload, String token) {
         return request()
                 .cookie(TOKEN, token)
                 .body(payload)
-                .put(BOOKING + id)
-                .then()
-                .statusCode(200)
-                .extract()
-                .as(BookingPayload.class);
+                .put(BOOKING + id);
     }
 
-    public boolean deleteBooking(int id, String token) {
-        Response response = request()
+    public Response deleteBooking(int id, String token) {
+        return request()
                 .cookie(TOKEN, token)
-                .delete(BOOKING + id)
-                .then()
-                .statusCode(201)
-                .extract()
-                .response();
-
-        return response.statusCode() == 201;
+                .delete(BOOKING + id);
     }
 }

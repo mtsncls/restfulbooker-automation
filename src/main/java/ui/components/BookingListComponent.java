@@ -5,13 +5,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.Duration;
 import java.util.List;
 
 public class BookingListComponent {
 
     private final WebDriver driver;
+    private final WebDriverWait wait;
 
     private final By bookingCard = By.cssSelector(".row.hotel-room-info");
     private final By firstName = By.cssSelector("p[data-testid='firstname']");
@@ -24,6 +24,7 @@ public class BookingListComponent {
 
     public BookingListComponent(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     public boolean containsBooking(String first, String last) {
@@ -32,9 +33,7 @@ public class BookingListComponent {
     }
 
     public List<BookingListItem> getAllBookings() {
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.
-                        visibilityOfElementLocated(By.cssSelector(".row.hotel-room-info")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(bookingCard));
 
         return driver.findElements(bookingCard).stream()
                 .map(this::mapToItem)
@@ -53,24 +52,7 @@ public class BookingListComponent {
         );
     }
 
-    public static class BookingListItem {
-        public final String firstName;
-        public final String lastName;
-        public final String price;
-        public final String deposit;
-        public final String checkIn;
-        public final String checkOut;
-        public final String needs;
-
-        public BookingListItem(String firstName, String lastName, String price,
-                               String deposit, String checkIn, String checkOut, String needs) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.price = price;
-            this.deposit = deposit;
-            this.checkIn = checkIn;
-            this.checkOut = checkOut;
-            this.needs = needs;
-        }
+    public record BookingListItem(String firstName, String lastName, String price,
+                                 String deposit, String checkIn, String checkOut, String needs) {
     }
 }

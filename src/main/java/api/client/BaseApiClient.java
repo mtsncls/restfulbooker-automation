@@ -1,5 +1,6 @@
 package api.client;
 
+import core.config.ConfigManager;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.config.ObjectMapperConfig;
@@ -14,7 +15,7 @@ public abstract class BaseApiClient {
 
     protected RequestSpecification request() {
         return RestAssured.given()
-                .baseUri("https://restful-booker.herokuapp.com")
+                .baseUri(ConfigManager.getApiBaseUrl())
                 .contentType("application/json")
                 .log().all();
     }

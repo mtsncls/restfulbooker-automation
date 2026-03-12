@@ -45,4 +45,8 @@ public class ConfigManager {
     public static String getBaseUrl() {
         return get("baseUrl");
     }
+
+    public static String getApiBaseUrl() {
+        return get("apiBaseUrl");
+    }
 }
