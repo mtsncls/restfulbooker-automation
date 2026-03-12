@@ -69,9 +69,4 @@ public class BasePage {
         WebElement element = waitForElementToBeVisible(locator);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
     }
-
-    protected void pause(long millis) throws InterruptedException {
-        Thread.sleep(millis);
-    }
-
 }
