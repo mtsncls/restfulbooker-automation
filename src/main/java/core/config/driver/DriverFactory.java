@@ -60,15 +60,30 @@ public class DriverFactory {
     private static ChromeOptions chromeOptions() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-gpu", "--no-sandbox");
+        if (isHeadless()) {
+            options.addArguments("--headless");
+        }
         return options;
     }
 
     private static FirefoxOptions firefoxOptions() {
-        return new FirefoxOptions();
+        FirefoxOptions options = new FirefoxOptions();
+        if (isHeadless()) {
+            options.addArguments("-headless");
+        }
+        return options;
     }
 
     private static EdgeOptions edgeOptions() {
-        return new EdgeOptions();
+        EdgeOptions options = new EdgeOptions();
+        if (isHeadless()) {
+            options.addArguments("--headless");
+        }
+        return options;
+    }
+
+    private static boolean isHeadless() {
+        return Boolean.parseBoolean(System.getProperty("headless", "false"));
     }
 
 }
