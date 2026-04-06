@@ -1,6 +1,8 @@
-# IntelliJ
-.idea/
+# For general XML files (e.g. from IDEs)
 *.xml
+# Project specific XML (Keep these)
+!testng-api.xml
+!testng-e2e.xml
 
 # Build output
 target/

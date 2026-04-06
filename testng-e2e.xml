@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<suite name="Suite End to End">
+
+    <listeners>
+        <listeners class-name="core.listeners.TestListener" />
+    </listeners>
+    
+    <test name="Selenium UI Tests">
+        <classes>
+            <class name="ui.HomePageTest"/>
+        </classes>
+    </test>
+</suite>
