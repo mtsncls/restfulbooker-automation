@@ -75,6 +75,14 @@
             <version>1.0.2</version>
         </dependency>
 
+        <!-- JSON Schema Validator -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>6.0.0</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- AssertJ -->
         <dependency>
             <groupId>org.assertj</groupId>
