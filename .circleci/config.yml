@@ -1,60 +1,83 @@
 version: 2.1
 
 executors:
-  java-executor:
+  java-builder:
     docker:
       - image: cimg/openjdk:17.0-node
       - image: selenium/standalone-chrome:latest
 
 jobs:
   build_project:
-    executor: java-executor
+    executor: java-builder
     steps:
       - checkout
-      - run: 
-        name: Install dependencies and compile
-        command: mvn clean compile
+      - run:
+          name: Compile and Install
+          command: mvn clean compile
       - persist_to_workspace:
-        root: .
-        paths:
-          - .
+          root: .
+          paths:
+            - .
 
   run_api_tests:
-    executor: java-executor
-    steps:
-      - attach_workspace:
-        at: .
-      - run:
-        name: Run API Tests
-        command: mvn test -Dsurefire.suiteXmlFiles=testng-api.xml
-      - store_test_results:
-        path: target/surefire-reports
-      - store_artifacts:
-        path: target/allure-results
-
-  run_e2e_tests:
-    executor: java-executor
+    executor: java-builder
     steps:
       - attach_workspace:
           at: .
       - run:
-          name: Run E2E Tests
+          name: API Tests - RestAssured
+          command: mvn test -DsuiteXmlFile=testng-api.xml
+      - persist_to_workspace:
+          root: .
+          paths:
+            - target/allure-results
+
+  run_e2e_tests:
+    executor: java-builder
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: E2E Tests - Selenium
+          command: mvn test -DsuiteXmlFile=testng-e2e.xml -Dheadless=true
+      - persist_to_workspace:
+          root: .
+          paths:
+            - target/allure-results
+
+deploy_report:
+    docker:
+      - image: cimg/node:current
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install Allure and Deploy
           command: |
-            mvn test -DsuiteXmlFile=testng-e2e.xml \
-                     -Dheadless=true \
-                     -Dchrome.args="--window-size=1920,1080,--disable-extensions"
-      - store_test_results:
-          path: target/surefire-reports
-      - store_artifacts:
-          path: target/allure-results
+            sudo curl -L https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz -o allure.tgz
+            sudo tar -zxvf allure.tgz -C /opt/
+            sudo ln -sf /opt/allure-2.27.0/bin/allure /usr/bin/allure
+            allure generate target/allure-results --clean -o allure-report
+            git config --global user.email "bot@circleci.com"
+            git config --global user.name "CircleCI Bot"
+            git remote set-url origin https://${GITHUB_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git
+            npx gh-pages -d allure-report -m "Update Allure Report [skip ci]"
 
 workflows:
-  build_and_test:
+  version: 2
+  automation_workflow:
     jobs:
       - build_project
       - run_api_tests:
-        requires:
-          - build_project
+          requires:
+            - build_project
       - run_e2e_tests:
-        requires:
-          - run_api_tests
+          requires:
+            - run_api_tests
+      - deploy_report:
+          requires:
+            - run_e2e_tests
+          filters:
+            branches:
+              only: master
