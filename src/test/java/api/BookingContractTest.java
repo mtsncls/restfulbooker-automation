@@ -30,7 +30,6 @@ public class BookingContractTest extends ApiBaseTest {
 
     @Test
     public void getBookingResponseMatchesContract() {
-        // First create a booking to ensure we have a valid ID
         BookingPayload payload = BookingFactory.createRandomBooking();
         BookingResponse created = bookingClient.createBooking(payload).as(BookingResponse.class);
         int bookingId = created.getBookingId();

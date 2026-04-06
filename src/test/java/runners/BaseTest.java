@@ -9,16 +9,15 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 public class BaseTest {
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void setUp() {
         WebDriver driver = DriverFactory.createInstance();
         DriverManager.setDriver(driver);
-
-        DriverManager.getDriver().manage().window().maximize();
-        DriverManager.getDriver().get(ConfigManager.getBaseUrl());
+        DriverManager.getDriver()
+        .get(ConfigManager.getBaseUrl());
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void tearDown() {
         DriverManager.quitDriver();
     }

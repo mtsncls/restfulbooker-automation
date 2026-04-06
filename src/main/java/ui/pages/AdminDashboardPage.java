@@ -57,11 +57,11 @@ public class AdminDashboardPage extends BasePage {
 
     public AdminDashboardPage createRoom(Room room) {
         clickAddRoom();
-        enterRoomNumber(room.getNumber());
-        selectRoomType(room.getType());
+        enterRoomNumber(room.getRoomNumber());
+        selectRoomType(room.getRoomType());
         setAccessible(room.isAccessible());
-        enterPrice(room.getPrice());
-        enterDetails(room.getDetails());
+        enterPrice(room.getRoomPrice());
+        enterDetails(room.getRoomDetails());
         click(createRoomButton);
         return this;
     }

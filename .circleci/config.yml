@@ -1,0 +1,60 @@
+version: 2.1
+
+executors:
+  java-executor:
+    docker:
+      - image: cimg/openjdk:17.0-node
+      - image: selenium/standalone-chrome:latest
+
+jobs:
+  build_project:
+    executor: java-executor
+    steps:
+      - checkout
+      - run: 
+        name: Install dependencies and compile
+        command: mvn clean compile
+      - persist_to_workspace:
+        root: .
+        paths:
+          - .
+
+  run_api_tests:
+    executor: java-executor
+    steps:
+      - attach_workspace:
+        at: .
+      - run:
+        name: Run API Tests
+        command: mvn test -Dsurefire.suiteXmlFiles=testng-api.xml
+      - store_test_results:
+        path: target/surefire-reports
+      - store_artifacts:
+        path: target/allure-results
+
+  run_e2e_tests:
+    executor: java-executor
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Run E2E Tests
+          command: |
+            mvn test -DsuiteXmlFile=testng-e2e.xml \
+                     -Dheadless=true \
+                     -Dchrome.args="--window-size=1920,1080,--disable-extensions"
+      - store_test_results:
+          path: target/surefire-reports
+      - store_artifacts:
+          path: target/allure-results
+
+workflows:
+  build_and_test:
+    jobs:
+      - build_project
+      - run_api_tests:
+        requires:
+          - build_project
+      - run_e2e_tests:
+        requires:
+          - run_api_tests

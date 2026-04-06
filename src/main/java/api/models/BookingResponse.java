@@ -1,17 +1,8 @@
 package api.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.extern.jackson.Jacksonized;
 
-@Data
-@Builder
-@Jacksonized
-@AllArgsConstructor
-@NoArgsConstructor
 public class BookingResponse {
 
     @JsonProperty("bookingid")
@@ -19,4 +10,20 @@ public class BookingResponse {
 
     @JsonProperty("booking")
     private BookingPayload booking;
+
+    public BookingResponse() {}
+
+    @JsonCreator
+    public BookingResponse(
+            @JsonProperty("bookingid") int bookingId,
+            @JsonProperty("booking") BookingPayload booking) {
+        this.bookingId = bookingId;
+        this.booking = booking;
+    }
+
+    public int getBookingId() { return bookingId; }
+    public void setBookingId(int bookingId) { this.bookingId = bookingId; }
+
+    public BookingPayload getBooking() { return booking; }
+    public void setBooking(BookingPayload booking) { this.booking = booking; }
 }

@@ -5,6 +5,7 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.mapper.ObjectMapperType;
+import io.qameta.allure.restassured.AllureRestAssured;
 
 public abstract class BaseApiClient {
 
@@ -15,6 +16,7 @@ public abstract class BaseApiClient {
 
     protected RequestSpecification request() {
         return RestAssured.given()
+                .filter(new AllureRestAssured())
                 .baseUri(ConfigManager.getApiBaseUrl())
                 .contentType("application/json")
                 .log().all();
