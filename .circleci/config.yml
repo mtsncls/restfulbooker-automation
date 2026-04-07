@@ -46,8 +46,7 @@ jobs:
             - target/allure-results
 
   deploy_report:
-    docker:
-      - image: cimg/node:current
+    executor: java-builder
     steps:
       - checkout
       - attach_workspace:
