@@ -61,7 +61,7 @@ jobs:
             git config --global user.email "bot@circleci.com"
             git config --global user.name "CircleCI Bot"
             git remote set-url origin https://${GITHUB_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git
-            npx gh-pages -d allure-report -m "Update Allure Report [skip ci]"
+            npx gh-pages -d allure-report -m "Update Allure Report [skip ci]" --no-cache
 
 workflows:
   automation_workflow:
