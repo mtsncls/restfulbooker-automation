@@ -39,7 +39,7 @@ jobs:
           at: .
       - run:
           name: E2E Tests - Selenium
-          command: mvn test -DsuiteXmlFile=testng-e2e.xml -Dheadless=true
+          command: mvn test -DsuiteXmlFile=testng-e2e.xml -DrunMode=grid
       - persist_to_workspace:
           root: .
           paths:
