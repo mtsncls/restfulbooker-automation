@@ -58,10 +58,14 @@ jobs:
             sudo tar -zxvf allure.tgz -C /opt/
             sudo ln -sf /opt/allure-2.27.0/bin/allure /usr/bin/allure
             allure generate target/allure-results --clean -o allure-report
-            git config --global user.email "bot@circleci.com"
-            git config --global user.name "CircleCI Bot"
-            git remote set-url origin https://${GITHUB_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git
-            npx gh-pages -d allure-report -m "Update Allure Report [skip ci]" --no-cache
+            cd allure-report
+            git init
+            git config user.name "CircleCI Bot"
+            git config user.email "bot@circleci.com"
+            git add .
+            git commit -m "Update Allure Report [skip ci]"
+            git remote add origin https://${GITHUB_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git
+            git push --force origin master:gh-pages
 
 workflows:
   automation_workflow:
