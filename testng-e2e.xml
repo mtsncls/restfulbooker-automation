@@ -3,7 +3,7 @@
 <suite name="Suite End to End">
 
     <listeners>
-        <listeners class-name="core.listeners.TestListener" />
+        <listener class-name="core.config.listeners.TestListener" />
     </listeners>
     
     <test name="Selenium UI Tests">

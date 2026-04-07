@@ -121,7 +121,7 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
                     </suiteXmlFiles>
-                    <argLine>-Dfile.encoding=UTF-8</argLine>
+                    <argLine>-Dfile.encoding=UTF-8 -Dallure.results.directory=${project.build.directory}/allure-results</argLine>
                 </configuration>
             </plugin>
 
