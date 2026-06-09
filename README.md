@@ -1,107 +1,125 @@
-# 🚀 Restful-Booker Automation Framework
+# Restful-Booker Automation Framework
 
-A professional-grade automation framework designed for end-to-end testing of the **Restful-Booker** ecosystem. This project combines robust API testing with reliable UI automation using modern design patterns and best practices.
+[![CI](https://github.com/mtsncls/restfulbooker-automation/actions/workflows/ci.yml/badge.svg)](https://github.com/mtsncls/restfulbooker-automation/actions/workflows/ci.yml)
+[![Java](https://img.shields.io/badge/Java-17-orange?logo=openjdk)](https://openjdk.org/)
+[![RestAssured](https://img.shields.io/badge/RestAssured-5.x-green)](https://rest-assured.io/)
+[![Selenium](https://img.shields.io/badge/Selenium-4.x-43B02A?logo=selenium)](https://www.selenium.dev/)
+[![TestNG](https://img.shields.io/badge/TestNG-7.x-red)](https://testng.org/)
 
----
-
-## 🛠 Tech Stack
-
-- **Language:** Java 17
-- **Build Tool:** Maven
-- **API Testing:** [RestAssured](https://rest-assured.io/)
-- **UI Testing:** [Selenium WebDriver](https://www.selenium.dev/)
-- **Test Runner:** TestNG
-- **Reporting:** [Allure Report](https://allurereport.org/)
-- **Data Generation:** [JavaFaker](https://github.com/DiUS/java-faker)
-- **Security:** [Snyk](https://snyk.io/) (for dependency & code scanning)
-- **Validation:** JSON Schema Validator
+A professional-grade hybrid automation framework for end-to-end testing of the [Restful-Booker](https://restful-booker.herokuapp.com/) ecosystem. Combines robust API testing with reliable UI automation using modern design patterns and best practices.
 
 ---
 
-## ✨ Features
+## Tech Stack
 
-- **Decoupled Architecture:** Clean separation between Core configuration, API clients, and UI Page Objects.
-- **Contract Testing:** Comprehensive JSON Schema validation to ensure API consistency.
-- **Fluent Assertions:** High-readability tests using [AssertJ](https://assertj.github.io/doc/).
-- **Dynamic Configuration:** Supports multiple test suites (API, E2E) via TestNG XML files.
-- **Premium Reporting:** Rich Allure reports with step-by-step logs and execution metadata.
-- **Security Inception:** Built-in vulnerability scanning to maintain a secure supply chain.
+| Tool | Purpose |
+|---|---|
+| Java 17 | Language |
+| Maven | Build tool |
+| [RestAssured](https://rest-assured.io/) | API test client |
+| [Selenium WebDriver](https://www.selenium.dev/) | UI automation |
+| TestNG | Test runner |
+| [Allure Report](https://allurereport.org/) | Reporting |
+| [JavaFaker](https://github.com/DiUS/java-faker) | Test data generation |
+| [AssertJ](https://assertj.github.io/doc/) | Fluent assertions |
+| [Snyk](https://snyk.io/) | Dependency & SAST scanning |
+| JSON Schema Validator | Contract testing |
 
 ---
 
-## 📂 Project Structure
+## Features
 
-```text
-restfulbooker-automation
-├── src
-│   ├── main/java
-│   │   ├── api/client      # API Request Specifications & Clients
-│   │   ├── core/config     # Driver Managers & Framework Configurations
-│   │   └── ui/pages        # Page Object Models for UI Interaction
-│   └── test/java
-│       ├── api             # API & Contract Test Suites
-│       ├── ui              # Selenium E2E Tests
-│       ├── data            # Test Data Providers & Models
-│       └── runners         # Base Test Classes & Setup logic
-├── testng-api.xml          # TestNG Suite for API tests
-├── testng-e2e.xml          # TestNG Suite for E2E UI tests
-└── pom.xml                 # Maven configuration & dependencies
+- **Decoupled architecture** — clean separation between Core config, API clients, and UI Page Objects
+- **Contract testing** — JSON Schema validation to ensure API response consistency
+- **Fluent assertions** — high-readability tests using AssertJ
+- **Dual test suites** — independent TestNG XML configs for API and E2E runs
+- **Dynamic test data** — JavaFaker-driven data generation to avoid static data collision
+- **Rich reporting** — Allure reports with step-by-step logs and execution metadata
+- **Security by default** — Snyk dependency scanning and SAST integrated into the workflow
+- **CI/CD** — GitHub Actions + CircleCI pipelines
+
+---
+
+## Project Structure
+
+```
+restfulbooker-automation/
+├── .circleci/                  # CircleCI pipeline config
+├── .github/workflows/          # GitHub Actions pipeline config
+├── src/
+│   ├── main/java/
+│   │   ├── api/client/         # API Request specs & clients
+│   │   ├── core/config/        # Driver managers & framework config
+│   │   └── ui/pages/           # Page Object Models
+│   └── test/java/
+│       ├── api/                # API & contract test suites
+│       ├── ui/                 # Selenium E2E tests
+│       ├── data/               # Test data providers & models
+│       └── runners/            # Base test classes & setup logic
+├── testng-api.xml              # TestNG suite for API tests
+├── testng-e2e.xml              # TestNG suite for E2E UI tests
+└── pom.xml
 ```
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
-- **Java JDK 17** or higher.
-- **Maven 3.9+** installed and configured in your PAT.
-- **Allure CLI** (optional, for viewing reports locally).
+- Java JDK 17+
+- Maven 3.9+
+- Allure CLI (optional, for local report serving)
 
-### Running Tests
+### Run tests
 
-Execute the full test suite or specific layers using the following commands:
-
-#### 1. API & Contract Tests
 ```bash
+# API & Contract tests
 mvn test -DsuiteXmlFile=testng-api.xml
-```
 
-#### 2. UI End-to-End Tests
-```bash
+# UI End-to-End tests
 mvn test -DsuiteXmlFile=testng-e2e.xml
 ```
 
----
+### View Allure report
 
-## 📊 Reporting
+```bash
+# Generate
+mvn allure:report
 
-We use **Allure Report** for visualizing test execution.
-
-1. **Run tests** (results will be generated in `allure-results/`).
-2. **Serve the report** locally:
-   ```bash
-   allure serve allure-results
-   ```
+# Serve locally
+mvn allure:serve
+```
 
 ---
 
-## 🔒 Security Best Practices
+## Design Patterns
 
-This project adheres to **Snyk's Security At Inception** principles:
-- Regular dependency scanning to mitigate supply chain risks.
-- SAST (Static Application Security Testing) integrated into the development workflow.
-- Standardized use of the latest stable versions for critical libraries like `jackson-databind` and `snakeyaml`.
+- **Client/Controller pattern** — endpoints and specs abstracted into dedicated client classes (`BookingClient`, `AuthClient`)
+- **Page Object Model** — UI interactions encapsulated per page
+- **Builder pattern** — POJO instantiation via Lombok `@Builder`
+- **Data-driven testing** — parameterized tests with dynamic data providers
+- **SOLID & DRY** — shared specs in `BaseSpec`, shared setup in `BaseTest`
 
 ---
 
-## 🤝 Contributing
+## Security
 
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request.
+This project follows **Snyk's Security At Inception** principles:
+
+- Regular dependency scanning to mitigate supply chain risks
+- SAST integrated into the development workflow
+- Pinned stable versions of critical libraries (`jackson-databind`, `snakeyaml`)
+
+---
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -m 'Add your feature'`)
+4. Push to the branch (`git push origin feature/your-feature`)
+5. Open a Pull Request
 
 ---
 
