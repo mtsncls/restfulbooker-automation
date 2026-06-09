@@ -1,0 +1,5 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Tue Jun 09 12:40:40 UTC 2026","Tue Jun 09 12:40:41 UTC 2026","119","Suite of Contract and API","API Tests","api.CreateBookingTest","api.CreateBookingTest","createBookingSuccessfully","createBookingSuccessfully",""
+"passed","Tue Jun 09 12:40:40 UTC 2026","Tue Jun 09 12:40:40 UTC 2026","215","Suite of Contract and API","API Tests","api.BookingContractTest","api.BookingContractTest","getBookingResponseMatchesContract","getBookingResponseMatchesContract",""
+"passed","Tue Jun 09 12:40:38 UTC 2026","Tue Jun 09 12:40:40 UTC 2026","1897","Suite of Contract and API","API Tests","api.BookingContractTest","api.BookingContractTest","createBookingResponseMatchesContract","createBookingResponseMatchesContract",""
+"passed","Tue Jun 09 12:41:25 UTC 2026","Tue Jun 09 12:41:26 UTC 2026","772","Suite End to End","Selenium UI Tests","ui.HomePageTest","ui.HomePageTest","verifyHomePageLoads","verifyHomePageLoads",""
